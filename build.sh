@@ -42,8 +42,9 @@ printf "DISK=${DISK}\n\n" > /mnt/gentoo/build_stage2.sh
 cat ${FILELOC}/build_stage2.sh >> /mnt/gentoo/build_stage2.sh
 chmod +x /mnt/gentoo/build_stage2.sh
 
-echo "Patching make.conf"
-cat $FILELOC/make >> /mnt/gentoo/etc/portage/make.conf
+echo "Creating another make.conf and patching"
+cp /mnt/gentoo/etc/portage/make.conf /mnt/gentoo/etc/portage/make2.conf
+cat $FILELOC/make >> /mnt/gentoo/etc/portage/make2.conf
 
 echo "Chrooting"
 echo "Stage 1 complete. Please run build_stage2.sh to continue"
