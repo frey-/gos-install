@@ -18,9 +18,6 @@ emerge --quiet --quiet-build gentoo-sources genkernel
 echo "!!! Building kernel"
 genkernel --no-menuconfig kernel
 
-echo "!!! Installing kernel"
-cp /usr/src/linux/arch/x86/bzImage /boot/kernel
-
 echo "!!! Installing fstab"
 echo "/dev/${DISK}  /  ext3  noatime  0 0" > /etc/fstab
 
