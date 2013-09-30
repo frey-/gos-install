@@ -1,5 +1,6 @@
 PACKAGES="syslog-ng vixie-cron firefox gvim emacs mpv rxvt-unicode tmux weston wicd"
 PACKAGES="${PACKAGES} =kde-base/kdeadmin-meta-4.11.1 =kde-base/kdebase-meta-4.11.1 =kde-base/kdebase-runtime-meta-4.11.1 =kde-base/kdemultimedia-meta-4.11.1 =kde-base/kdenetwork-meta-4.11.1 =kde-base/kdeutils-meta-4.11.1"
+PACKAGES="${PACKAGES} =x11-base/xorg-server-9999-r1 oh-my-zsh"
 
 MAKECONF="CFLAGS=\"-O2 -pipe\" \n \
 CXXFLAGS=\"${CFLAGS}\" \n \
@@ -34,7 +35,7 @@ echo "Emerging layman and flaggie"
 emerge --quiet --quiet-build layman flaggie
 
 echo "Installing make.conf"
-echo $MAKECONF > /etc/portage/make.conf
+printf $MAKECONF > /etc/portage/make.conf
 
 echo "Adding aoliynik and /g/OS overlays"
 layman -o http://aoliynik-overlay.googlecode.com/files/aoliynik-overlay.xml -f -a aoliynik

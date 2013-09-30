@@ -38,12 +38,11 @@ mount --rbind /sys /mnt/gentoo/sys
 cp -L /etc/resolv.conf /mnt/gentoo/etc/
 
 echo "Installing stage 2"
-echo "DISK=${DISK}\n\n" > /mnt/gentoo/build_stage2.sh
+printf "DISK=${DISK}\n\n" > /mnt/gentoo/build_stage2.sh
 cat ${FILELOC}/build_stage2.sh >> /mnt/gentoo/build_stage2.sh
 chmod +x /mnt/gentoo/build_stage2.sh
 
 echo "Chrooting"
+echo "Stage 1 complete. Please run build_stage2.sh to continue"
 chroot /mnt/gentoo /bin/bash
 source /etc/profile
-
-echo "Stage 1 complete. Please run build_stage2.sh to continue"
