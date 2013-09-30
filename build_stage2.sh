@@ -2,12 +2,9 @@ PACKAGES="syslog-ng vixie-cron firefox gvim emacs mpv rxvt-unicode tmux weston w
 PACKAGES="${PACKAGES} =kde-base/kdeadmin-meta-4.11.1 =kde-base/kdebase-meta-4.11.1 =kde-base/kdebase-runtime-meta-4.11.1 =kde-base/kdemultimedia-meta-4.11.1 =kde-base/kdenetwork-meta-4.11.1 =kde-base/kdeutils-meta-4.11.1"
 PACKAGES="${PACKAGES} =x11-base/xorg-server-9999-r1 oh-my-zsh"
 
-MAKECONF="CFLAGS=\"-O2 -pipe\" \n \
-CXXFLAGS=\"${CFLAGS}\" \n \
-CHOST=\"x86_64-pc-linux-gnu\" \n \
-USE=\"bindist mmx sse sse2 X opengl gles wayland pulseaudio egl\" \n \
-source /var/lib/layman/make.conf"
 
+echo "Evaluating profile"
+source /etc/profile
 
 echo "Fetching portage tree"
 cd /usr/
@@ -29,13 +26,10 @@ echo "Installing kernel"
 cp /usr/src/linux/arch/x86/bzImage /boot/kernel
 
 echo "Installing fstab"
-echo "/dev/${DISK}  /  ext3  noatime  0 0"
+echo "/dev/${DISK}  /  ext3  noatime  0 0" > /etc/fstab
 
 echo "Emerging layman and flaggie"
 emerge --quiet --quiet-build layman flaggie
-
-echo "Installing make.conf"
-printf $MAKECONF > /etc/portage/make.conf
 
 echo "Adding aoliynik and /g/OS overlays"
 layman -o http://aoliynik-overlay.googlecode.com/files/aoliynik-overlay.xml -f -a aoliynik
@@ -56,3 +50,5 @@ rc-update add wicd default
 
 echo "Setting root password\nPlease enter new password"
 passwd
+
+echo "Build script completed. Please set timezone, add new users and configure bootloader before rebooting"
