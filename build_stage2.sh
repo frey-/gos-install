@@ -24,6 +24,8 @@ echo "/dev/${DISK}  /  ext3  noatime  0 0" > /etc/fstab
 echo "!!! Emerging layman and flaggie"
 emerge --quiet --quiet-build flaggie
 flaggie layman +cvs +subversion
+# to remove the massive dependency list that gnupg pulls in
+flaggie git -gpg
 emerge --quiet --quiet-build layman
 
 echo "!!! Installing secondary make.conf"
