@@ -16,7 +16,7 @@ echo "!!! Emerging kernel and generation tools"
 emerge --quiet --quiet-build gentoo-sources genkernel
 
 echo "!!! Building kernel"
-genkernel --no-install --no-menuconfig bzImage
+genkernel --no-menuconfig kernel
 
 echo "!!! Installing kernel"
 cp /usr/src/linux/arch/x86/bzImage /boot/kernel
