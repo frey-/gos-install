@@ -1,6 +1,6 @@
 PACKAGES="syslog-ng vixie-cron firefox gvim emacs mpv rxvt-unicode tmux weston wicd burg"
 PACKAGES="${PACKAGES} =kde-base/kdeadmin-meta-4.11.1 =kde-base/kdebase-meta-4.11.1 =kde-base/kdebase-runtime-meta-4.11.1 =kde-base/kdemultimedia-meta-4.11.1 =kde-base/kdenetwork-meta-4.11.1 =kde-base/kdeutils-meta-4.11.1"
-PACKAGES="${PACKAGES} =x11-base/xorg-server-9999-r1 oh-my-zsh"
+PACKAGES="${PACKAGES} =x11-base/xorg-server-9999-r1 oh-my-zsh @qt5-essentials @qt5-addons"
 
 
 echo "!!! Evaluating profile"
@@ -22,14 +22,17 @@ echo "!!! Installing fstab"
 echo "/dev/${DISK}  /  ext3  noatime  0 0" > /etc/fstab
 
 echo "!!! Emerging layman and flaggie"
-emerge --quiet --quiet-build layman flaggie
+emerge --quiet --quiet-build flaggie
+flaggie layman +cvs +subversion
+emerge --quiet --quiet-build layman
 
 echo "!!! Installing secondary make.conf"
 mv /etc/portage/make2.conf /etc/portage/make.conf
 
-echo "!!! Adding aoliynik and /g/OS overlays"
+echo "!!! Adding overlays"
 layman -o http://aoliynik-overlay.googlecode.com/files/aoliynik-overlay.xml -f -a aoliynik
 layman -o https://raw.github.com/SlashGeeSlashOS/gos-overlay/master/gos-overlay.xml -f -a gos-overlay
+layman -a qt
 
 echo "!!! Adding flags"
 flaggie weston +X +fbdev +opengl +wayland-compositor +xwayland
