@@ -6,7 +6,7 @@
 # Need to add a bit to unmask packages
 ###
 
-PACKAGES="syslog-ng vixie-cron firefox gvim emacs mpv rxvt-unicode tmux weston"
+PACKAGES="syslog-ng vixie-cron firefox gvim emacs mpv rxvt-unicode tmux weston wicd"
 PACKAGES="${PACKAGES} =kde-base/kdeadmin-meta-4.11.1 =kde-base/kdebase-meta-4.11.1 =kde-base/kdebase-runtime-meta-4.11.1 =kde-base/kdemultimedia-meta-4.11.1 =kde-base/kdenetwork-meta-4.11.1 =kde-base/kdeutils-meta-4.11.1"
 DISK=$1
 STAGE3_DATE="20130822"
@@ -80,11 +80,18 @@ echo "Adding aoliynik and /g/OS overlays"
 layman -o http://aoliynik-overlay.googlecode.com/files/aoliynik-overlay.xml -f -a aoliynik
 layman -o https://raw.github.com/SlashGeeSlashOS/gos-overlay/master/gos-overlay.xml -f -a gos-overlay
 
-echo "Adding flags to weston"
+echo "Adding flags"
 flaggie weston +X +fbdev +opengl +wayland-compositor +xwayland
+flaggie wicd +X +gtk +ncurses +libnotify
 
 echo "Emerging packages"
 emerge -v $PACKAGES
+
+echo "Setting up RC"
+rc-update add sshd default
+rc-update add vixie-cron default
+rc-update add syslog-ng default
+rc-update add wicd default
 
 echo "Setting root password\nPlease enter new password"
 passwd
