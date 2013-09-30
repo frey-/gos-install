@@ -19,9 +19,9 @@ USE=\"bindist mmx sse sse2 X opengl gles wayland pulseaudio egl\" \n \
 source /var/lib/layman/make.conf"
  
 
-if [$1 == ''] then
+if ["$1" == '']; then
     echo "Specify disk"
-    exit
+    exit 0;
 fi
 
 echo "Creating filesystem"
@@ -32,7 +32,7 @@ mount /dev/$DISK /mnt/gentoo
 cd /mnt/gentoo
 
 echo "Fetching stage3"
-wget http://distfiles.gentoo.org/${ARCH}/stage3-${ARCH}-${STAGE3_DATE}.tar.bz2
+wget http://distfiles.gentoo.org/releases/${ARCH}/current-stage3/stage3-${ARCH}-${STAGE3_DATE}.tar.bz2
 
 echo "Unpacking stage3"
 tar -xf stage3*
