@@ -9,7 +9,8 @@ echo "$MSGPREFIX Evaluating profile"
 source /etc/profile
 
 echo "$MSGPREFIX Fetching portage tree"
-emerge-webrsync
+emerge --sync
+emerge --quiet --quiet-build --oneshot portage
 
 echo "$MSGPREFIX Setting profile"
 eselect profile set default/linux/amd64/13.0/desktop/kde
@@ -25,7 +26,7 @@ echo "/dev/${DISK}  /  ext3  noatime  0 0" > /etc/fstab
 
 echo "$MSGPREFIX Emerging layman and flaggie"
 emerge --quiet --quiet-build flaggie
-flaggie layman +cvs +subversion
+flaggie layman +cvs +subversion +mercurial
 # to remove the massive dependency lists
 flaggie dev-vcs/git -gpg -gtk
 flaggie subversion -kde
@@ -36,8 +37,8 @@ echo "$MSGPREFIX Installing secondary make.conf"
 mv /etc/portage/make2.conf /etc/portage/make.conf
 
 echo "$MSGPREFIX Adding overlays"
-layman -o http://aoliynik-overlay.googlecode.com/files/aoliynik-overlay.xml -f -a aoliynik
 layman -o https://raw.github.com/SlashGeeSlashOS/gos-overlay/master/gos-overlay.xml -f -a gos-overlay
+layman -a wavilen
 layman -a qt
 
 echo "$MSGPREFIX Adding flags"
@@ -53,7 +54,7 @@ rc-update add vixie-cron default
 rc-update add syslog-ng default
 rc-update add wicd default
 
-echo "$MSGPREFIX Setting root password\n!!! Please enter new password"
+printf "$MSGPREFIX Setting root password\n${MSGPREFIX} Please enter new password"
 passwd
 
 echo "$MSGPREFIX Build script completed. Please set timezone, add new users and configure bootloader before rebooting"
