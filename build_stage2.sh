@@ -18,11 +18,11 @@ eselect profile set default/linux/amd64/13.0/desktop/kde
 echo "$MSGPREFIX Emerging kernel and generation tools"
 emerge --quiet --quiet-build gentoo-sources genkernel
 
-echo "$MSGPREFIX Building kernel"
-genkernel --no-menuconfig kernel
-
 echo "$MSGPREFIX Installing fstab"
 echo "/dev/${DISK}  /  ext3  noatime  0 0" > /etc/fstab
+
+echo "$MSGPREFIX Building kernel"
+genkernel --no-menuconfig kernel
 
 echo "$MSGPREFIX Emerging layman and flaggie"
 emerge --quiet --quiet-build flaggie
@@ -52,7 +52,7 @@ flaggie ffmpeg +threads +vdpau
 printf "media-video/libav\nmedia-video/libpostproc" >> /etc/portage/package.mask
 ###
 # to solve systemd/eudev dependence
-printf "sys-apps/systemd\nsys-fs/eudev" >> /etc/portage/package.mask
+printf "\nsys-apps/systemd\nsys-fs/eudev" >> /etc/portage/package.mask
 ###
 # prevents Qt4 being built
 emerge @qt5-essentials --backtrack=30 --autounmask-write
@@ -67,14 +67,13 @@ emerge -uDN world
 emerge $PACKAGES
 
 
-#uncomment when block fixed
-# echo "$MSGPREFIX Setting up RC"
-# rc-update add sshd default
-# rc-update add vixie-cron default
-# rc-update add syslog-ng default
-# rc-update add wicd default
+echo "$MSGPREFIX Setting up RC"
+rc-update add sshd default
+rc-update add vixie-cron default
+rc-update add syslog-ng default
+rc-update add wicd default
 
-# printf "$MSGPREFIX Setting root password\n${MSGPREFIX} Please enter new password"
-# passwd
+printf "$MSGPREFIX Setting root password\n${MSGPREFIX} Please enter new password"
+passwd
 
-# echo "$MSGPREFIX Build script completed. Please set timezone, add new users and configure bootloader before rebooting"
+echo "$MSGPREFIX Build script completed. Please set timezone, add new users and configure bootloader before rebooting"
