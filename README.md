@@ -8,3 +8,4 @@ Run the script with the device block you have partitioned to be the root, like s
 ```sh
 ./build.sh sda1
 ```
+Different architectures can be selected by changing the value of ARCH in build.sh

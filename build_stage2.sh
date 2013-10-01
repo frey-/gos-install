@@ -1,4 +1,4 @@
-PACKAGES="syslog-ng vixie-cron firefox gvim emacs mpv rxvt-unicode tmux weston wicd burg"
+PACKAGES="syslog-ng vixie-cron =www-client/firefox-24.0-r1 gvim emacs mpv rxvt-unicode tmux weston wicd burg"
 PACKAGES="${PACKAGES} =kde-base/kdeadmin-meta-4.11.1 =kde-base/kdebase-meta-4.11.1 =kde-base/kdebase-runtime-meta-4.11.1 =kde-base/kdemultimedia-meta-4.11.1 =kde-base/kdenetwork-meta-4.11.1 =kde-base/kdeutils-meta-4.11.1"
 PACKAGES="${PACKAGES} =x11-base/xorg-server-9999-r1 oh-my-zsh @qt5-essentials @qt5-addons"
 
@@ -46,15 +46,21 @@ flaggie weston +X +fbdev +opengl +wayland-compositor +xwayland
 flaggie wicd +X +gtk +ncurses +libnotify
 
 echo "$MSGPREFIX Emerging packages"
+# to solve mpv conflict
+emerge =media-video/ffmpeg-1.2.3 --autounmask-write
+flaggie ffmpeg +threads +vdpau
+###
 emerge -v $PACKAGES
 
-echo "$MSGPREFIX Setting up RC"
-rc-update add sshd default
-rc-update add vixie-cron default
-rc-update add syslog-ng default
-rc-update add wicd default
 
-printf "$MSGPREFIX Setting root password\n${MSGPREFIX} Please enter new password"
-passwd
+#uncomment when block fixed
+# echo "$MSGPREFIX Setting up RC"
+# rc-update add sshd default
+# rc-update add vixie-cron default
+# rc-update add syslog-ng default
+# rc-update add wicd default
 
-echo "$MSGPREFIX Build script completed. Please set timezone, add new users and configure bootloader before rebooting"
+# printf "$MSGPREFIX Setting root password\n${MSGPREFIX} Please enter new password"
+# passwd
+
+# echo "$MSGPREFIX Build script completed. Please set timezone, add new users and configure bootloader before rebooting"
