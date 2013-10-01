@@ -1,6 +1,6 @@
 PACKAGES="syslog-ng vixie-cron =www-client/firefox-24.0-r1 gvim emacs mpv rxvt-unicode tmux weston wicd burg"
 PACKAGES="${PACKAGES} =kde-base/kdeadmin-meta-4.11.1 =kde-base/kdebase-meta-4.11.1 =kde-base/kdebase-runtime-meta-4.11.1 =kde-base/kdemultimedia-meta-4.11.1 =kde-base/kdenetwork-meta-4.11.1 =kde-base/kdeutils-meta-4.11.1"
-PACKAGES="${PACKAGES} =x11-base/xorg-server-9999-r1 oh-my-zsh @qt5-essentials @qt5-addons"
+PACKAGES="${PACKAGES} =x11-base/xorg-server-9999-r1 oh-my-zsh @qt5-addons"
 
 MSGPREFIX=" !!!"
 
@@ -49,8 +49,22 @@ echo "$MSGPREFIX Emerging packages"
 # to solve mpv conflict
 emerge =media-video/ffmpeg-1.2.3 --autounmask-write
 flaggie ffmpeg +threads +vdpau
+printf "media-video/libav\nmedia-video/libpostproc" >> /etc/portage/package.mask
 ###
-emerge -v $PACKAGES
+# to solve systemd/eudev dependence
+printf "sys-apps/systemd\nsys-fs/eudev" >> /etc/portage/package.mask
+###
+# prevents Qt4 being built
+emerge @qt5-essentials --backtrack=30 --autounmask-write
+etc-update --automode -3
+emerge @qt5-essentials --backtrack=30
+###
+emerge $PACKAGES --autounmask-write
+etc-update --automode -3
+# helps fix some blocks
+emerge -uDN world
+###
+emerge $PACKAGES
 
 
 #uncomment when block fixed
