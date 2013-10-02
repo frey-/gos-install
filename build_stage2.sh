@@ -1,6 +1,6 @@
-PACKAGES="syslog-ng vixie-cron =www-client/firefox-24.0-r1 gvim emacs mpv rxvt-unicode tmux weston wicd burg"
+PACKAGES="syslog-ng vixie-cron =www-client/firefox-24.0-r1 gvim emacs mpv rxvt-unicode tmux weston wicd burg eix"
 PACKAGES="${PACKAGES} =kde-base/kdeadmin-meta-4.11.1 =kde-base/kdebase-meta-4.11.1 =kde-base/kdebase-runtime-meta-4.11.1 =kde-base/kdemultimedia-meta-4.11.1 =kde-base/kdenetwork-meta-4.11.1 =kde-base/kdeutils-meta-4.11.1"
-PACKAGES="${PACKAGES} =x11-base/xorg-server-9999-r1 oh-my-zsh @qt5-addons"
+PACKAGES="${PACKAGES} =x11-base/xorg-server-9999-r1 oh-my-zsh"
 
 MSGPREFIX=" !!!"
 
@@ -24,12 +24,20 @@ echo "/dev/${DISK}  /  ext3  noatime  0 0" > /etc/fstab
 echo "$MSGPREFIX Building kernel"
 genkernel --no-menuconfig kernel
 
-echo "$MSGPREFIX Emerging layman and flaggie"
+echo "$MSGPREFIX Emerging flaggie"
 emerge --quiet --quiet-build flaggie
+
+echo "$MSGPREFIX Emerging layman"
 flaggie layman +cvs +subversion +mercurial
 # to remove the massive dependency lists
 flaggie dev-vcs/git -gpg -gtk
 flaggie subversion -kde
+###
+echo " $MSGPREFIX Emerging new perl version before layman build"
+# to prevent having to rebuild a bunch of perl modules later on
+emerge --quiet =dev-lang/perl-5.16.1 --autounmask-write
+etc-update --automode -3
+emerge --quiet --quiet-build =dev-lang/perl-5.16.1
 ###
 emerge --quiet --quiet-build layman
 
@@ -47,7 +55,8 @@ flaggie wicd +X +gtk +ncurses +libnotify
 
 echo "$MSGPREFIX Emerging packages"
 # to solve mpv conflict
-emerge =media-video/ffmpeg-1.2.3 --autounmask-write
+echo " $MSGPREFIX Fixing mpv ffmpeg/libav package block"
+emerge --quiet =media-video/ffmpeg-1.2.3 --autounmask-write
 flaggie ffmpeg +threads +vdpau
 printf "media-video/libav\nmedia-video/libpostproc" >> /etc/portage/package.mask
 ###
@@ -55,17 +64,20 @@ printf "media-video/libav\nmedia-video/libpostproc" >> /etc/portage/package.mask
 printf "\nsys-apps/systemd\nsys-fs/eudev" >> /etc/portage/package.mask
 ###
 # prevents Qt4 being built
-emerge @qt5-essentials --backtrack=30 --autounmask-write
+echo " $MSGPREFIX Emerging Qt5"
+emerge @qt5-essentials @qt5-addons --backtrack=30 --autounmask-write
 etc-update --automode -3
-emerge @qt5-essentials --backtrack=30
+emerge @qt5-essentials @qt5-addons --backtrack=30
 ###
+echo " $MSGPREFIX Unmasking packages"
 emerge $PACKAGES --autounmask-write
 etc-update --automode -3
 # helps fix some blocks
+echo " $MSGPREFIX Performing world update to fix package blocks"
 emerge -uDN world
 ###
+echo " $MSGPREFIX Emerging packages"
 emerge $PACKAGES
-
 
 echo "$MSGPREFIX Setting up RC"
 rc-update add sshd default
