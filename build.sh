@@ -50,7 +50,7 @@ cat ${FILELOC}/build_stage2.sh >> ${MOUNTPOINT}/build_stage2.sh
 chmod +x ${MOUNTPOINT}/build_stage2.sh
 
 echo "$MSGPREFIX Creating another make.conf and patching"
-cp ${MOUNTPOINT}/etc/portage/make.conf /mnt/gentoo/etc/portage/make2.conf
+cp ${MOUNTPOINT}/etc/portage/make.conf ${MOUNTPOINT}/etc/portage/make2.conf
 cat $FILELOC/make >> ${MOUNTPOINT}/etc/portage/make2.conf
 
 echo "$MSGPREFIX Chrooting"
