@@ -63,6 +63,9 @@ printf "media-video/libav\nmedia-video/libpostproc" >> /etc/portage/package.mask
 # to solve systemd/eudev dependence
 printf "\nsys-apps/systemd\nsys-fs/eudev" >> /etc/portage/package.mask
 ###
+# fixes cmake build issues
+flaggie cmake -qt4
+###
 # prevents Qt4 being built
 echo " $MSGPREFIX Emerging Qt5"
 emerge @qt5-essentials @qt5-addons --backtrack=30 --autounmask-write
