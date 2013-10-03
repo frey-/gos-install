@@ -52,19 +52,19 @@ layman -a qt
 echo "$MSGPREFIX Adding flags"
 flaggie weston +X +fbdev +opengl +wayland-compositor +xwayland
 flaggie wicd +X +gtk +ncurses +libnotify
+# fixes cmake build issues
+flaggie cmake -qt4
+###
+flaggie ffmpeg +threads +vdpau
 
 echo "$MSGPREFIX Emerging packages"
 # to solve mpv conflict
 echo " $MSGPREFIX Fixing mpv ffmpeg/libav package block"
 emerge --quiet =media-video/ffmpeg-1.2.3 --autounmask-write
-flaggie ffmpeg +threads +vdpau
 printf "media-video/libav\nmedia-video/libpostproc" >> /etc/portage/package.mask
 ###
 # to solve systemd/eudev dependence
 printf "\nsys-apps/systemd\nsys-fs/eudev" >> /etc/portage/package.mask
-###
-# fixes cmake build issues
-flaggie cmake -qt4
 ###
 # prevents Qt4 being built
 echo " $MSGPREFIX Emerging Qt5"

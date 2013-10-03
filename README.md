@@ -6,7 +6,7 @@ Installer for /g/OS, currently in the form of a simple buildscript. Boot a Gento
 #### Usage ####
 Run the script with the device block you have partitioned to be the root, like so:
 ```sh
-./build.sh sda1
+./build.sh /dev/sda1
 ```
 Different architectures can be selected by changing the value of ARCH in build.sh. After the initial environment is set up, you'll be required to run another script
 ```sh
